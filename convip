@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+# convip 
+#
+# ip文字列に0を前置
+#
+use strict;
+use warnings;
+
+my $ips = qr/(\d+\.\d+\.\d+\.\d+)/;
+my $opt = shift;
+if ( !(defined($opt)) ){
+	$opt = "-a";
+}
+while(<>) {
+	s/$ips/&convert_ip($1,$opt);/eg;
+	print;
+}
+sub convert_ip{
+	my $ipstring = shift;
+	my $lopt = shift; 
+	my $str;
+	my @ip = split(/\./,$ipstring);
+	foreach my $val(@ip) {
+		return $ipstring if ( $val > 255 );
+	}
+	if ($lopt eq "-d"){
+		$str=sprintf "%u.%u.%u.%u",$ip[0],$ip[1],$ip[2],$ip[3];
+	}
+	else {
+		$str=sprintf "%03d.%03d.%03d.%03d",$ip[0],$ip[1],$ip[2],$ip[3];
+	}
+	return $str;
+}
